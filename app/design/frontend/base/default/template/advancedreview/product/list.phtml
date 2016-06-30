@@ -1,0 +1,62 @@
+<?php
+/*
+* Copyright (c) 2013 www.magebuzz.com
+*/
+?>
+<?php if(Mage::getStoreConfig('advancedreview/general/enabled_review')==1): ?>     
+<?php $_items = $this->getReviewsCollection()->getItems();?>
+<div class="box-collateral box-reviews" id="customer-reviews">
+    <?php if (count($_items)):?>
+        <h2><?php echo $this->__('Customer Reviews') ?></h2>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        <dl>
+        <?php foreach ($_items as $_review):?>
+            <dt>
+                <a href="<?php echo  Mage::getUrl('review/product/view', array('id' => $_review->getId())); ?>"><?php echo $this->htmlEscape($_review->getTitle()) ?></a> <?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?>
+            </dt>
+           
+            <dd>
+                <?php $_votes = $_review->getRatingVotes(); ?>
+                <?php if (count($_votes)): ?>
+                <table class="ratings-table">
+                    <col width="1" />
+                    <col />
+                    <tbody>
+                        <?php foreach ($_votes as $_vote): ?>
+                        <tr>
+                            <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?> </th>
+                            <td>
+                                <div class="rating-box">
+                                    <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>  
+                                </div>
+                            </td>                          
+                        </tr>
+                        
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php endif; ?>
+                <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+                <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
+                 <dt>
+                          <div id="fb-root"></div>
+                        <script>(function(d, s, id) {
+                          var js, fjs = d.getElementsByTagName(s)[0];
+                          if (d.getElementById(id)) return;
+                          js = d.createElement(s); js.id = id;
+                          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+                          fjs.parentNode.insertBefore(js, fjs);
+                        }(document, 'script', 'facebook-jssdk'));</script>                   
+                      <a href="<?php echo  Mage::getUrl('review/product/view', array('id' => $_review->getId())); ?>" class="twitter-share-button" data-lang="en">Tweet</a>
+
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+            </dt>
+            </dd>
+        <?php endforeach; ?>
+        </dl>
+        <?php echo $this->getChildHtml('toolbar') ?>
+
+    <?php endif;?>
+
+</div>
+<?php endif?>

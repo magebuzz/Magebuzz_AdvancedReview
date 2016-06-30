@@ -1,0 +1,45 @@
+<?php
+/*
+* Copyright (c) 2013 www.magebuzz.com
+*/
+?>
+  <?php $model= Mage::getModel('advancedreview/advancedreview');?>
+  <?php $collection = $model->getDataLatestReview(); ?>
+    <div class="block block-subscribe">
+      <div class="block-title">
+        <strong><span><?php echo Mage::helper('advancedreview')->__('Latest Review ')?></span></strong>
+      </div>
+      <div class="block-content"> 
+        <?php if(count($collection) > 0):?>      
+          <?php foreach($collection as $value):?>
+            <ul>  
+            <?php 
+            $storeId = Mage::app()->getStore()->getId();
+            $summaryData = Mage::getModel('review/review_summary')->setStoreId($storeId)->load($value->getEntityPkValue());
+            ?>
+              <li class="title" >
+                <b><?php echo $value->getTitle();?></b>
+              </li>
+              <li class="comment">
+                <?php 
+                $comment = $value->getDetail();
+                if(strlen($comment)>= 97){
+                  $comment = substr( $comment, 0, 97 ).'...';
+                }
+                echo $comment;?>
+              </li> 
+              <li class="rating-box" style="float:left;">
+                <div class="rating" style="width:<?php echo $summaryData['rating_summary']; ?>%"></div>
+              </li> 
+              <li class="nick_name">
+                <?php echo 'Review by: '.$value->getNickname();?>
+              </li>
+               
+              <li class="create_time">
+                <?php echo 'Posted on ' . date("m-d-y",strtotime($value->getCreatedAt()));?>
+              </li>     
+            </ul>
+          <?php endforeach;?>
+        <?php endif; ?>
+      </div>
+  </div>
